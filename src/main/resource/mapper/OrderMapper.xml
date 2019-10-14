@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.OrderMapper">
+    <!-- 1.查询所有门店信息，id值为对应接口中方法的名字
+        resultType指定将查询的结果封装到哪个pojo对象中
+     -->
+    <!--	<select id="findAll" resultType="com.pojo.Door">-->
+    <!--		select * from tb_door-->
+    <!--	</select>-->
+    <resultMap id="Order" type="com.pojo.Order">
+        <id property="id" column="id"></id>
+        <result column="door_id" property="doorId"></result>
+        <result column="order_no" property="orderNo"></result>
+        <result column="order_type" property="orderType"></result>
+        <result column="pnum" property="pnum"></result>
+        <result column="cashier" property="cashier"></result>
+        <result column="order_time" property="orderTime"></result>
+        <result column="pay_time" property="payTime"></result>
+        <result column="pay_type" property="payType"></result>
+        <result column="price" property="price"></result>
+        <association property="door" javaType="com.pojo.Door">
+        </association>
+    </resultMap>
+    <select id="findAll" resultMap="Order">
+        select * from tb_order
+    </select>
+    <!-- 2.新增门店信息
+        #{}占位符中的变量名要和Door类中的属性名保持一致
+     -->
+    <update id="addOrder">
+        insert into tb_order
+        values(null, #{doorId}, #{orderNo}, #{orderType}, #{pnum}, #{cashier}, #{orderTime}, #{payTime}, #{payType}, #{price})
+    </update>
+    <!-- 3.根据id删除门店信息 -->
+    <update id="deleteById">
+        delete from tb_order where id=#{id}
+    </update>
+
+    <!-- 4.根据id查询门店信息 -->
+    <select id="findById"  resultMap="Order">
+        select * from tb_order where id=#{id}
+    </select>
+
+    <!-- 4.根据id修改门店信息 -->
+    <update id="updateById">
+        update tb_order set
+        door_id=#{doorId},order_no=#{orderNo}, order_type=#{orderType}, pnum=#{pnum}, cashier=#{cashier}, order_time=#{orderTime},pay_time=#{payTime}, pay_type=#{payType},price=#{price}
+        where id=#{id}
+    </update>
+
+
+
+
+
+</mapper>
