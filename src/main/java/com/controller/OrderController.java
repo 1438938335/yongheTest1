@@ -1,9 +1,10 @@
 package com.controller;
 
-import com.dao.DoorMapper;
-import com.dao.OrderMapper;
+
 import com.pojo.Door;
 import com.pojo.Order;
+import com.service.DoorService;
+import com.service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,40 +21,40 @@ import java.util.List;
 @Controller
 public class OrderController {
     @Resource
-    private OrderMapper dao;
+    private OrderService orderService;
     @Resource
-    private DoorMapper dao2;
+    private DoorService doorService;
 
     @RequestMapping("/orderList")
     public String findAll(Model model){
-        List<Order> list=dao.findAll();
+        List<Order> list=orderService.findAll();
         for(Order od:list){
-            od.setDoor(dao2.findById(od.getDoorId()));
+            od.setDoor(doorService.findById(od.getDoorId()));
         }
          model.addAttribute("list",list);
          return "order_list";
     }
     @RequestMapping("/order_beforeAdd")
     public String BeforeAdd(Model model){
-        List<Door> doors=dao2.findAll();
+        List<Door> doors=doorService.findAll();
         model.addAttribute("doors",doors);
         return "order_add";
     }
     @RequestMapping("/orderAdd")
     public String addOrder(Order order){
-        dao.addOrder(order);
+        orderService.addOrder(order);
         return "forward:/orderList";
     }
     @RequestMapping("/orderDelete")
     public String delOrder(Integer id){
-        dao.deleteById(id);
+        orderService.deleteById(id);
         return "forward:/orderList";
     }
     @RequestMapping("/orderInfo")
     public String Update(Integer id,Model model){
-       Order order1=dao.findById(id);
-       order1.setDoor(dao2.findById(order1.getDoorId()));
-       List<Door> list=dao2.findAll();
+       Order order1=orderService.findById(id);
+       order1.setDoor(doorService.findById(order1.getDoorId()));
+       List<Door> list=doorService.findAll();
        model.addAttribute("order",order1);
         System.out.println("------------------------------------------------------------------------------------");
        System.out.println(order1.toString());
@@ -62,7 +63,7 @@ public class OrderController {
     }
     @RequestMapping("orderUpdate")
     public String orderUpdate(Order order){
-        dao.updateById(order);
+        orderService.updateById(order);
         return "forward:/orderList";
     }
 

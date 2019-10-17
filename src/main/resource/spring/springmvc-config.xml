@@ -19,7 +19,7 @@
 		将会自动将类注册为bean 
 	 -->
 	<context:component-scan 
-		base-package="com.controller">
+		base-package="com">
 	</context:component-scan>
 	
 	<!-- 4.配置内部资源视图解析器

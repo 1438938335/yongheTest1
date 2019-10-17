@@ -1,7 +1,7 @@
 package com.controller;
 
-import com.dao.DoorMapper;
 import com.pojo.Door;
+import com.service.DoorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +16,13 @@ public class DoorController {
 	/** 通过自动装配从spring容器中获取DoorMapper接口
 	 * 的子类实例，赋值给dao */
 	@Autowired 
-	private DoorMapper dao;
+	private DoorService service;
 	
 	/** 1、查询所有门店信息 */
 	@RequestMapping("/doorList")
 	public String doorList(Model model) {
 		//调用dao的findAll方法查询所有门店信息
-		List<Door> list =dao.findAll();
+		List<Door> list =service.findAll();
 		//将门店对象集合存入Model中
 		model.addAttribute( "list", list );
 
@@ -34,7 +34,7 @@ public class DoorController {
 	@RequestMapping("/doorAdd")
 	public String doorAdd( Door door ) {
 		//调用dao的addDoor方法添加门店信息
-		dao.addDoor( door );
+		service.addDoor( door );
 		//新增成功后跳转回门店列表页面，显示最新列表
 		return "forward:/doorList";
 	}
@@ -42,7 +42,7 @@ public class DoorController {
 	/** 3.根据id删除门店信息 */
 	@RequestMapping("/doorDelete")
 	public String doorDelete( Integer id ) {
-		dao.deleteById( id );
+		service.deleteById( id );
 		//删除成功后跳转回门店列表页面，显示最新列表
 		return "forward:/doorList";
 	}
@@ -51,7 +51,7 @@ public class DoorController {
 	@RequestMapping("/doorInfo")
 	public String doorInfo( Integer id, Model model ) {
 		//根据id查询门店信息
-		Door door = dao.findById(id);
+		Door door = service.findById(id);
 		//将门店对象存入Model中
 		model.addAttribute( "door", door );
 		//转向门店修改页面, 进行数据的回显
@@ -61,7 +61,7 @@ public class DoorController {
 	/** 5、根据id修改门店信息 */
 	@RequestMapping("/doorUpdate")
 	public String doorUpdate( Door door ) {
-		dao.updateById( door );
+		service.updateById( door );
 		//修改成功后跳转回门店列表页面，显示最新列表
 		return "forward:/doorList";
 	}
